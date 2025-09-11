@@ -6,10 +6,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import static org.mockito.Mockito.when;
+
+
+import com.Suvam.unitTesting.business.ItemBusinessService;
+import com.Suvam.unitTesting.model.Item;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
@@ -21,6 +29,9 @@ public class ItemControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 	
+	 @MockitoBean
+	private ItemBusinessService businessService; 
+	
 	@Test
 	public void dummyItem_basic() throws Exception {
 	
@@ -30,6 +41,19 @@ public class ItemControllerTest {
 		MvcResult result = mockMvc.perform(request)
 				.andExpect(status().isOk())
 				.andExpect(content().json("{\"id\":1,\"name\":\"Ball\",\"price\":10,\"quantity\":100}"))
+				.andReturn();
+		
+	}
+	
+	@Test
+	public void ItemBusinessService_basic() throws Exception {
+		when(businessService.retreiveHardcodedItem()).thenReturn(new Item(2,"Item2",10,10));
+		RequestBuilder request = MockMvcRequestBuilders
+				.get("/item-from-business-service")
+				.accept(MediaType.APPLICATION_JSON);
+		MvcResult result = mockMvc.perform(request)
+				.andExpect(status().isOk())
+				.andExpect(content().json("{id:2,name:Item2,price:10}"))
 				.andReturn();
 		
 	}
