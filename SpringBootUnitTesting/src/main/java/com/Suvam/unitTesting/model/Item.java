@@ -14,6 +14,10 @@ public class Item {
 	
 	@Transient
 	private int value;
+
+    protected Item(){
+
+    }
 	
 	public int getId() {
 		return id;

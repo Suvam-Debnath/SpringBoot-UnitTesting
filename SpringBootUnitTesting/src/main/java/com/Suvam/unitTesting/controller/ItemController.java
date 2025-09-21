@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.Suvam.unitTesting.business.ItemBusinessService;
 import com.Suvam.unitTesting.model.Item;
 
+import java.util.List;
+
 @RestController
 public class ItemController {
 	
@@ -23,4 +25,9 @@ public class ItemController {
 	public Item itemFromBusinessService() {
 		return businessService.retreiveHardcodedItem();
 	}
+
+    @GetMapping("/all-items-from-database")
+    public List<Item> reterieveAllItems(){
+        return businessService.retrieveAllItems();
+    }
 }
